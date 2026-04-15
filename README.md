@@ -1,5 +1,5 @@
 
-<img src="assets/logo.png" alt="ConfLayers" width="100" align="left"><div align="center"><h1>&nbsp;ConfLayers: Adaptive Confidence-based Layer Skipping for Self-Speculative Decoding</h1></div>
+<div align="center"><h1>&nbsp;ConfLayers: Adaptive Confidence-based Layer Skipping for Self-Speculative Decoding</h1></div>
 
 <p align="center">
 <!-- <a href="">
@@ -12,7 +12,7 @@
 
 We introduce ConfLayers, a confidence-driven and training-free framework for constructing adaptive draft subnetworks in self-speculative decoding. ConfLayers estimates intermediate-layer confidence during generation to assess each layer’s contribution to predictive certainty, selectively skipping layers with low confidence impact. The draft configuration is iteratively refined based on verifier acceptance, producing a compact and context-aware subnetwork without retraining or architectural modification. Across diverse benchmarks and multiple models, ConfLayers achieves up to 1.4× speedup over standard autoregressive decoding while maintaining high output quality. It consistently outperforms prior heuristic and dynamic skipping or early-exiting baselines such as SWIFT and DEL, demonstrating robust and efficient acceleration.
 
-![conflayers](./plots/conflayers.png)
+![conflayers](./plots/Conflayer.png)
 
 ## Installation
 
