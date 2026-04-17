@@ -44,6 +44,14 @@ This codebase is built on [Swift](https://github.com/hemingkx/SWIFT.git).
 If you find the resources in this repository useful, please cite our paper:
 
 ```
-
+@misc{amer2026conflayersadaptiveconfidencebasedlayer,
+      title={ConfLayers: Adaptive Confidence-based Layer Skipping for Self-Speculative Decoding}, 
+      author={Walaa Amer and Uday das and Fadi Kurdahi},
+      year={2026},
+      eprint={2604.14612},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2604.14612}, 
+}
 ```
 
