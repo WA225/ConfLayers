@@ -1,12 +1,13 @@
 
-<div align="center"><h1>&nbsp;ConfLayers: Adaptive Confidence-based Layer Skipping for Self-Speculative Decoding</h1></div>
+<div align="center"><h1>&nbsp;ConfLayers</h1></div>
 
 <p align="center">
-<!-- <a href="">
-  <img src="https://img.shields.io/badge/Arxiv-2410.06916-orange.svg"></a>  -->
+<a href="https://arxiv.org/abs/2604.14612">
+  <img src="https://img.shields.io/badge/Arxiv-2604.14612-orange.svg"></a> 
 <a href="https://opensource.org/licenses/Apache-2.0">
   <img src="https://img.shields.io/badge/License-Apache_2.0-green.svg"></a> 
 
+# ConfLayers: Adaptive Confidence-based Layer Skipping for Self-Speculative Decoding
 
 ## Introduction
 
