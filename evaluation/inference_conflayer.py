@@ -225,10 +225,10 @@ if __name__ == "__main__":
         help="The interval of ConfLayers optimization.",
     )
     parser.add_argument(
-        "--bayes-interval",
+        "--search-interval",
         type=int,
         default=25,
-        help="The interval of bayesian optimization.",
+        help="The interval of optimization.",
     )
     parser.add_argument(
         "--max-opt-iter",
@@ -262,10 +262,10 @@ if __name__ == "__main__":
         help="Layer set optimization method.",
     )
     parser.add_argument(
-        "--bayes",
+        "--search",
         action="store_true",
         default=False,
-        help="Bayes Optimization of Layer set.",
+        help="Optimization of Layer set.",
     )
     parser.add_argument(
         "--cache-hit",
