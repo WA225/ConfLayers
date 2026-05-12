@@ -107,7 +107,7 @@ def swift_forward(input_ids, model, tokenizer, max_new_tokens, statistics=None, 
         if statistics["optimization"] is not None and new_token_num > (statistics["context_window"] + 1):
             statistics["origin_score"].append(((accept_length_tree - 1)/len(top1_prob)))
             statistics["origin_acc"].append(accept_length_tree-1)
-            if statistics["opt_iter"] > 0 and len(statistics["origin_score"]) == statistics["bayes_interval"]/2 :
+            if statistics["opt_iter"] > 0 and len(statistics["origin_score"]) == statistics["search_interval"]/2 :
                 if len(layers_skipped)>=skip_layer_num:
                     ret_score = np.mean(statistics["origin_score"])
                     acc_score = np.mean(statistics["origin_acc"])
@@ -115,7 +115,7 @@ def swift_forward(input_ids, model, tokenizer, max_new_tokens, statistics=None, 
                         statistics["origin_score"]=[]
                         statistics["origin_acc"] = []
                         optimization=True
-            if statistics["opt_iter"] > 0 and len(statistics["origin_score"]) > statistics["bayes_interval"] :
+            if statistics["opt_iter"] > 0 and len(statistics["origin_score"]) > statistics["search_interval"] :
                 if len(layers_skipped)>=skip_layer_num:
                     ret_score = np.mean(statistics["origin_score"])
                     acc_score = np.mean(statistics["origin_acc"])
@@ -302,7 +302,7 @@ if __name__ == "__main__":
 
     args.model_name = (args.model_id + "-" + str(args.optimization) + "-" + str(args.dtype)+ "-temp-" + str(args.temperature)
                        + "-top-p-" + str(args.top_p) + "-seed-" + str(args.seed) + "-max_new_tokens-" + str(args.max_new_tokens)+ "-opt_interval-" + str(args.opt_interval)
-                       + "-bayes_interval-" + str(args.bayes_interval) + "-max_opt-" + str(args.max_opt_iter) + "-max_tolerance-" + str(args.max_tolerance_iter)
+                       + "-search_interval-" + str(args.search_interval) + "-max_opt-" + str(args.max_opt_iter) + "-max_tolerance-" + str(args.max_tolerance_iter)
                        + "-max_score-" + str(args.max_score) + "-context_window-" + str(args.context_window) + "-skip_ratio-" + str(args.skip_ratio))
     answer_file = f"outputs/{args.task_name}/{args.task_name}_{args.data_num}/model_answer/{args.model_id}/{args.model_name}.jsonl"
     set_logger()
@@ -332,7 +332,7 @@ if __name__ == "__main__":
         logits_processor = None
     if args.cache_hit:
         # Load the cached layer set configuration
-        args.optimization, args.bayes=False, False
+        args.optimization, args.search=False, False
         _skip_layer_id_set = get_cache_configuration(model_name=args.model_id,
                                                                                   task_name=args.task_name)
     else:
@@ -349,9 +349,9 @@ if __name__ == "__main__":
 
     statistics = {"model_id": args.model_id, "origin_score": [], "opt_iter": 0, "tolerance_iter": 0,
                   "skip_ratio": args.skip_ratio, "acceptance_rate_list": [], "opt_interval": args.opt_interval,
-                  "bayes_interval": args.bayes_interval, "max_opt_iter": args.max_opt_iter,
+                  "search_interval": args.search_interval, "max_opt_iter": args.max_opt_iter,
                   "max_tolerance_iter": args.max_tolerance_iter, "max_score": args.max_score,
-                  "context_window": args.context_window, "optimization": args.optimization, "bayes": args.bayes, 
+                  "context_window": args.context_window, "optimization": args.optimization, "search": args.search, 
                   "best_score": 0, "best_acc": 0, "opt_set": [], "lambda": args.lam, "origin_acc" : []}
 
     run_eval(
