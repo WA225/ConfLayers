@@ -25,7 +25,7 @@ pip3 install torch torchvision --index-url https://download.pytorch.org/whl/rocm
 
 ## Inference
 
-Run command lines in `eval_llama.sh`, the results will be stored in `outputs/.../model_answer/`.
+Run command lines in `eval.sh`, the results will be stored in `outputs/.../model_answer/`.
 
 ```
 chmod +x eval.sh
