@@ -1,23 +1,21 @@
+
 MODEL_PATH="meta-llama/Llama-2-13b-hf"
 MODEL_NAME="llama-2-13b"
-TEMP=0.0 # 0.2 for general tasks and 0.6 for code generation
-TOP_P=0.85 # 0.85 for general tasks and 0.95 for code generation
+TEMP=0.0
+TOP_P=0.85
 DATA_NUM=100
 SEED=2024
 GPU_DEVICES=0
 MAX_NEW_TOKENS=512
 torch_dtype="float16" # ["float32", "float64", "float16", "bfloat16"]
-TASK_NAME="gsm8k"
+TASK_NAME="gsm8k" # ["cnndm", "gsm8k", "wmt14_de-en", "alpaca"]
 
 # Dynamic Hyperparameters
-OPT_INTERVAL=1
 SEARCH_INTERVAL=30
 MAX_OPT_ITER=100
-MAX_TOLERANCE_ITER=300
 MAX_SCORE=0.95
 CONTEXT_WINDOW=100
 SKIP_RATIO=0.4
-LAMBDA=0.25
-OPT_METHOD="dynamic"
+OPT_METHOD="conflayers"
 
-CUDA_VISIBLE_DEVICES=${GPU_DEVICES} python -m evaluation.inference_conflayer --model-path $MODEL_PATH --model-id ${MODEL_NAME} --temperature $TEMP --top-p ${TOP_P} --dtype $torch_dtype --task-name ${TASK_NAME} --data-num ${DATA_NUM} --max-new-tokens ${MAX_NEW_TOKENS} --seed $SEED --context-window ${CONTEXT_WINDOW} --opt-interval ${OPT_INTERVAL} --search-interval ${SEARCH_INTERVAL} --max-opt-iter ${MAX_OPT_ITER} --max-tolerance-iter ${MAX_TOLERANCE_ITER} --max-score ${MAX_SCORE} --skip-ratio ${SKIP_RATIO} --optimization ${OPT_METHOD} --search --lam ${LAMBDA} --cache-hit &> logs/conflayers.out
+CUDA_VISIBLE_DEVICES=${GPU_DEVICES} python -m evaluation.inference_conflayer --model-path $MODEL_PATH --model-id ${MODEL_NAME} --temperature $TEMP --top-p ${TOP_P} --dtype $torch_dtype --task-name ${TASK_NAME} --data-num ${DATA_NUM} --max-new-tokens ${MAX_NEW_TOKENS} --seed $SEED --context-window ${CONTEXT_WINDOW} --search-interval ${SEARCH_INTERVAL} --max-opt-iter ${MAX_OPT_ITER} --max-score ${MAX_SCORE} --skip-ratio ${SKIP_RATIO} --optimization ${OPT_METHOD} #--cache-hit

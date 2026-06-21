@@ -213,18 +213,6 @@ if __name__ == "__main__":
         help="The skipped layer ratio of ConfLayers.",
     )
     parser.add_argument(
-        "--lam",
-        type=float,
-        default=0,
-        help="Lambda value for the adaptive window.",
-    )
-    parser.add_argument(
-        "--opt-interval",
-        type=int,
-        default=1,
-        help="The interval of ConfLayers optimization.",
-    )
-    parser.add_argument(
         "--search-interval",
         type=int,
         default=25,
@@ -235,12 +223,6 @@ if __name__ == "__main__":
         type=int,
         default=1000,
         help="The maximum layer set optimization iteration.",
-    )
-    parser.add_argument(
-        "--max-tolerance-iter",
-        type=int,
-        default=300,
-        help="The maximum tolerance of layer set search iteration.",
     )
     parser.add_argument(
         "--max-score",
@@ -257,15 +239,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--optimization",
         type=str,
-        default=None,
-        choices=["swift", "dynamic"],
+        default="None",
+        choices=["swift", "conflayers"],
         help="Layer set optimization method.",
-    )
-    parser.add_argument(
-        "--search",
-        action="store_true",
-        default=False,
-        help="Optimization of Layer set.",
     )
     parser.add_argument(
         "--cache-hit",
@@ -301,8 +277,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     args.model_name = (args.model_id + "-" + str(args.optimization) + "-" + str(args.dtype)+ "-temp-" + str(args.temperature)
-                       + "-top-p-" + str(args.top_p) + "-seed-" + str(args.seed) + "-max_new_tokens-" + str(args.max_new_tokens)+ "-opt_interval-" + str(args.opt_interval)
-                       + "-search_interval-" + str(args.search_interval) + "-max_opt-" + str(args.max_opt_iter) + "-max_tolerance-" + str(args.max_tolerance_iter)
+                       + "-top-p-" + str(args.top_p) + "-seed-" + str(args.seed) + "-max_new_tokens-" + str(args.max_new_tokens)
+                       + "-search_interval-" + str(args.search_interval) + "-max_opt-" + str(args.max_opt_iter) 
                        + "-max_score-" + str(args.max_score) + "-context_window-" + str(args.context_window) + "-skip_ratio-" + str(args.skip_ratio))
     answer_file = f"outputs/{args.task_name}/{args.task_name}_{args.data_num}/model_answer/{args.model_id}/{args.model_name}.jsonl"
     set_logger()
@@ -332,7 +308,7 @@ if __name__ == "__main__":
         logits_processor = None
     if args.cache_hit:
         # Load the cached layer set configuration
-        args.optimization, args.search=False, False
+        args.optimization=False
         _skip_layer_id_set = get_cache_configuration(model_name=args.model_id,
                                                                                   task_name=args.task_name)
     else:
@@ -347,12 +323,12 @@ if __name__ == "__main__":
     optimizer.set_gp_params(alpha=1e-2)
     utility = UtilityFunction(kind="ucb", kappa=2.5, xi=0.0)
 
-    statistics = {"model_id": args.model_id, "origin_score": [], "opt_iter": 0, "tolerance_iter": 0,
-                  "skip_ratio": args.skip_ratio, "acceptance_rate_list": [], "opt_interval": args.opt_interval,
+    statistics = {"model_id": args.model_id, "origin_score": [], "opt_iter": 0, 
+                  "skip_ratio": args.skip_ratio, "acceptance_rate_list": [],
                   "search_interval": args.search_interval, "max_opt_iter": args.max_opt_iter,
-                  "max_tolerance_iter": args.max_tolerance_iter, "max_score": args.max_score,
-                  "context_window": args.context_window, "optimization": args.optimization, "search": args.search, 
-                  "best_score": 0, "best_acc": 0, "opt_set": [], "lambda": args.lam, "origin_acc" : []}
+                  "max_score": args.max_score,
+                  "context_window": args.context_window, "optimization": args.optimization, 
+                  "best_score": 0, "best_acc": 0, "opt_set": [], "lambda": 0, "origin_acc" : []}
 
     run_eval(
         model=model,

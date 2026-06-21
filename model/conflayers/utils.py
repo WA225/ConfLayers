@@ -813,7 +813,13 @@ def dynamic_optimization(model, output_ids, input_past_key_values_data,
                 local_means.append(window_threshold)
                 if np.mean(confidence_values[i]) < window_threshold: 
                     skip_layers.append(layer_indices[i])
-
+        
+        perc = len(skip_layers)/(num_layers-2)
+        if (perc>statistics["skip_ratio"]+0.25): #statistics["opt_iter"]<20     
+            statistics["lambda"]+=0.05
+        elif (perc<statistics["skip_ratio"]):
+            statistics["lambda"]-=0.05
+        # logging.info("lambda: {} and skip ratio: {}".format(lam, perc))
         return sorted(skip_layers), local_means, confidence_values, grad, windows
     
     cur_past_key_values_data = []
